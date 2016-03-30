@@ -15,21 +15,21 @@
 int main(void)
 {
     DDRA = 0x00; PORTA = 0xFF;	//config port A's 8 pins as inputs
-	DDRB = 0xFF; PORTB = 0x00;	//config port B's 8 pins as outputs
-								//init output on PORTB to 0x00
-	unsigned char tmpB = 0x00;	//temp var to hold value of B
+    DDRB = 0xFF; PORTB = 0x00;	//config port B's 8 pins as outputs
+                                //init output on PORTB to 0x00
+    unsigned char tmpB = 0x00;	//temp var to hold value of B
     while (1) 
     {
-		//if PA1PA0 is 01, set PB0=1, else =0
-		if (PINA == 0x01) {	//true if PA0 is 1
-			tmpB = (tmpB & 0xFE) | 0x01;	//sets tmpB to bbbbbbb1
-								//(clear rightmost bit, then set to 1)
-		}
-		else {
-			tmpB = (tmpB & 0xFE);
-		}
-		PORTB = tmpB;
+        //if PA1PA0 is 01, set PB0=1, else =0
+        if (PINA == 0x01) {	//true if PA0 is 1
+            tmpB = (tmpB & 0xFE) | 0x01;	//sets tmpB to bbbbbbb1
+                                        //(clear rightmost bit, then set to 1)
+        }
+        else {
+            tmpB = (tmpB & 0xFE);
+        }
+        PORTB = tmpB;
     }
-	return 0;
+    return 0;
 }
 

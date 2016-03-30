@@ -43,7 +43,8 @@ int main(void)
 		else if (PINC & 0x80) {
 			PORTC = PORTC & 0x7F;	//clear PC7=1
 		}
-		PORTC = (PORTC & 0xF0) | cntavail;	//update available space output on PORTC
+		PORTC = (PORTC & 0xF0) | cntavail;	//update available space output 
+                                            //on PORTC
     }
 	return 0;
 }
