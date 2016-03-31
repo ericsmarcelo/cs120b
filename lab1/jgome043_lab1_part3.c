@@ -1,12 +1,17 @@
 /*
- * jgome043_lab1_part3.c
+ *  jgome043_lab1_part3.c
  *
- * Created: 3/28/2016 7:23:39 PM
- * Author : Joel (jgome043@ucr.edu)
- * Lab Section: 021
- * Assignment: Lab 1 Exercise 3
- * I acknowledge all content contained herein, excluding template or example
- * code, is my own original work.
+ *  Created: 3/28/2016 7:23:39 PM
+ *	Name & E-mail: Joel Gomez - jgome043@ucr.edu
+ *	CS Login: jgome043
+ *	Partner(s) Name & E-mail: Eric Marcelo - emarc003@ucr.edu
+ *	Lab Section: 021
+ *	Assignment: Lab #1  Exercise #3
+ *	Exercise Description:
+ *
+ *
+ *	I acknowledge all content contained herein, excluding template or example
+ *	code, is my own original work.
  */
 
 #include <avr/io.h>
@@ -43,7 +48,7 @@ int main(void)
 		else if (PINC & 0x80) {
 			PORTC = PORTC & 0x7F;	//clear PC7=1
 		}
-		PORTC = (PORTC & 0xF0) | cntavail;	//update available space output 
+		PORTC = (PORTC & 0xF0) | cntavail;	//update available space output
                                             //on PORTC
     }
 	return 0;
