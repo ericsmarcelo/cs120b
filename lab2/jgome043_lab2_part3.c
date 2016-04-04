@@ -26,79 +26,79 @@ int main(void)
 {
 	DDRA = 0x00; PORTA = 0xFF;	//set PORTA to inputs
 	DDRC = 0xFF; PORTC = 0x00;	//set PORTC to outputs
-	
+
 	unsigned char fuel_level = 0;	//var to hold numerical fuel level
     unsigned char tempC = 0;        //temp var to serve as buffer for PORTC
-	
+
 	while(1)
 	{
 		fuel_level = (PINA & 0x0F);	//get current fuel level
-		
-		//check if key is in ignition, driver is seated and seatbelt 
+
+		//check if key is in ignition, driver is seated and seatbelt
 		//not fastened
 		if (GetBit(PINA, 4) && GetBit(PINA, 5) && !GetBit(PINA, 6)) {
-			tempC = SetBit(PORTC, 7, 1);	//illuminate seatbelt
+			tempC = SetBit(tempC, 7, 1);	//illuminate seatbelt
 											//warning lamp
 		}
 		else {
-			tempC = SetBit(PORTC, 7, 0);	//clear seatbelt
+			tempC = SetBit(tempC, 7, 0);	//clear seatbelt
 											//warning lamp
 		}
 		//check if fuel level is near empty
 		if (fuel_level <= 4) {
-			tempC = SetBit(PORTC, 6, 1);	//illum low fuel lamp
+			tempC = SetBit(tempC, 6, 1);	//illum low fuel lamp
 		}
 		else {
-			tempC = SetBit(PORTC, 6, 0);	//clear low fuel lamp
+			tempC = SetBit(tempC, 6, 0);	//clear low fuel lamp
 		}
 		//check fuel level, illuminate/clear appropriate LED segments
         //set segment
 		if (fuel_level >= 1) {
-			tempC = SetBit(PORTC, 5, 1);    //store changes to temp var
+			tempC = SetBit(tempC, 5, 1);    //store changes to temp var
 		}
         //clear segment
 		else {
-			tempC = SetBit(PORTC, 5, 0);    //store changes to temp var
+			tempC = SetBit(tempC, 5, 0);    //store changes to temp var
 		}
         //set segment
 		if (fuel_level >= 3) {
-			tempC = SetBit(PORTC, 4, 1);    //store changes to temp var
+			tempC = SetBit(tempC, 4, 1);    //store changes to temp var
 		}
         //clear segment
 		else {
-			tempC = SetBit(PORTC, 4, 0);    //store changes to temp var
+			tempC = SetBit(tempC, 4, 0);    //store changes to temp var
 		}
         //set segment
 		if (fuel_level >= 5) {
-			tempC = SetBit(PORTC, 3, 1);    //store changes to temp var
+			tempC = SetBit(tempC, 3, 1);    //store changes to temp var
 		}
         //clear segment
 		else {
-			tempC = SetBit(PORTC, 3, 0);    //store changes to temp var
+			tempC = SetBit(tempC, 3, 0);    //store changes to temp var
 		}
         //set segment
 		if (fuel_level >= 7) {
-			tempC = SetBit(PORTC, 2, 1);    //store changes to temp var
+			tempC = SetBit(tempC, 2, 1);    //store changes to temp var
 		}
         //clear segment
 		else {
-			tempC = SetBit(PORTC, 2, 0);    //store changes to temp var
+			tempC = SetBit(tempC, 2, 0);    //store changes to temp var
 		}
         //set segment
 		if (fuel_level >= 10) {
-			tempC = SetBit(PORTC, 1, 1);    //store changes to temp var
+			tempC = SetBit(tempC, 1, 1);    //store changes to temp var
 		}
         //clear segment
 		else {
-			tempC = SetBit(PORTC, 1, 0);    //store changes to temp var
+			tempC = SetBit(tempC, 1, 0);    //store changes to temp var
 		}
         //set segment
 		if (fuel_level >= 13) {
-			tempC = SetBit(PORTC, 0, 1);    //store changes to temp var
+			tempC = SetBit(tempC, 0, 1);    //store changes to temp var
 		}
         //clear segment
 		else {
-			tempC = SetBit(PORTC, 0, 0);    //store changes to temp var
+			tempC = SetBit(tempC, 0, 0);    //store changes to temp var
 		}
         PORTC = tempC;                  //set PORTC
 	}

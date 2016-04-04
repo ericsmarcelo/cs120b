@@ -36,47 +36,47 @@ int main(void)
 
         //check if fuel level is near empty
         if (fuel_level <= 4) {      //illum low fuel lamp
-            tempC = SetBit(PORTC, 6, 1); //set temp var
+            tempC = SetBit(tempC, 6, 1); //set temp var
         }
         else {	                    //clear low fuel lamp
-            tempC = SetBit(PORTC, 6, 0);    //set temp var
+            tempC = SetBit(tempC, 6, 0);    //set temp var
         }
         //check fuel level, illuminate/clear appropriate LED segments
         if (fuel_level >= 1) {
-            tempC = SetBit(PORTC, 5, 1);    //set temp var
+            tempC = SetBit(tempC, 5, 1);    //set temp var
         }
         else {
-            tempC = SetBit(PORTC, 5, 0);    //set temp var
+            tempC = SetBit(tempC, 5, 0);    //set temp var
         }
         if (fuel_level >= 3) {
-            tempC = SetBit(PORTC, 4, 1);    //set temp var
+            tempC = SetBit(tempC, 4, 1);    //set temp var
         }
         else {
-            tempC = SetBit(PORTC, 4, 0);    //set temp var
+            tempC = SetBit(tempC, 4, 0);    //set temp var
         }
         if (fuel_level >= 5) {
-            tempC = SetBit(PORTC, 3, 1);    //set temp var
+            tempC = SetBit(tempC, 3, 1);    //set temp var
         }
         else {
-            tempC = SetBit(PORTC, 3, 0);    //set temp var
+            tempC = SetBit(tempC, 3, 0);    //set temp var
         }
         if (fuel_level >= 7) {
-            tempC = SetBit(PORTC, 2, 1);    //set temp var
+            tempC = SetBit(tempC, 2, 1);    //set temp var
         }
         else {
-            tempC = SetBit(PORTC, 2, 0);    //set temp var
+            tempC = SetBit(tempC, 2, 0);    //set temp var
         }
         if (fuel_level >= 10) {
-            tempC = SetBit(PORTC, 1, 1);    //set temp var
+            tempC = SetBit(tempC, 1, 1);    //set temp var
         }
         else {
-            tempC = SetBit(PORTC, 1, 0);    //set temp var
+            tempC = SetBit(tempC, 1, 0);    //set temp var
         }
         if (fuel_level >= 13) {
-            tempC = SetBit(PORTC, 0, 1);    //set temp var
+            tempC = SetBit(tempC, 0, 1);    //set temp var
         }
         else {
-            tempC = SetBit(PORTC, 0, 0);    //set temp var
+            tempC = SetBit(tempC, 0, 0);    //set temp var
         }
         PORTC = tempC;              //set PORTC
  	}

@@ -25,11 +25,13 @@ unsigned char GetBit(unsigned char x, unsigned char k) {
 int main(void)
 {
 	DDRA = 0x00; PORTA = 0xFF;	//set PORTA to inputs
+	DDRB = 0xFF; PORTB = 0x00;	//set PORTB to outputs
 	DDRC = 0xFF; PORTC = 0x00;	//set PORTC to outputs
-	
+
 	unsigned char val = 0;		//temp var for PORTA values
 	unsigned char upper_a = 0;	//temp var for PA7...PA4
 	unsigned char lower_a = 0;	//temp var for PA3...PA0
+	unsigned char tempB = 0;    //temp var for PORTB buffer
     unsigned char tempC = 0;    //temp var for PORTC buffer
 
 	while(1)
@@ -39,7 +41,9 @@ int main(void)
 										//shift them to upper bits places
 		upper_a = (val & 0xF0) >> 4;	//store bits PA7...PA4 and shift
 										//shift them to lower bits places
-		tempC = ((PORTC & 0x00) | lower_a) | upper_a;	//clear and store bits
-        PORTC = tempC;                  //set PORTC
+		tempB = (tempB & 0x00) | upper_a;	//clear and store PORTB bits
+		tempC = (tempC & 0x00) | lower_a;	//clear and store PORTC bits
+        PORTB = tempB;                  //set PORTC
+		PORTC = tempC;                  //set PORTC
 	}
 }

@@ -43,10 +43,10 @@ int main(void)
 
 		//check if lot is full
 		if (cntavail == 0) {
-			tempC = (PORTC & 0x7F) | 0x80;	//set PC7=1
+			tempC = (tempC & 0x7F) | 0x80;	//set PC7=1
 		}
 		else if (PINC & 0x80) {
-			tempC = PORTC & 0x7F;	//clear PC7=1
+			tempC = tempC & 0x7F;	//clear PC7=1
 		}
         PORTC = tempC;              //set PORTC
 		PORTC = (PORTC & 0xF0) | cntavail;	//update available space output

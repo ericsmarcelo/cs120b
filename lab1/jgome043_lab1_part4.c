@@ -41,32 +41,33 @@ int main(void)
 
 		//check if total weight exceeds max (140kg)
 		if (total_kg > max_kg) {
-			tempD = (PORTD & 0xFE) | 0x01;	//set PD0=1
+			tempD = (tempD & 0xFE) | 0x01;	//set PD0=1
 		}
 		else {
-			tempD = PORTD & 0xFE;	//clear PD0
+			tempD = tempD & 0xFE;	//clear PD0
 		}
 		//check if A and B weight difference exceeds max (80kg)
 		if ((top_kg - bot_kg) > diff_kg) {
-			tempD = (PORTD & 0xFD) | 0x02;	//set PD1=1
+			tempD = (tempD & 0xFD) | 0x02;	//set PD1=1
 		}
 		else {
-			tempD = PORTD & 0xFD;	//clear PD1
+			tempD = tempD & 0xFD;	//clear PD1
 		}
+
 		//check if total weight/4 exceeds 6 bit representation
 		//ie 252kg
 		if ((total_kg >> 2) > 63) {
-			tempD = (PORTD & 0x03) | 0xFC;	//set bits D7-D2=1
+			tempD = (tempD & 0x03) | 0xFC;	//set bits D7-D2=1
 		}
 		//check if total weight is less than 4kg
 		//(4kg is 6 bit representation minimum)
 		else if (total_kg < 4) {
-			tempD = (PORTD & 0x03) | 0x03;	//set bits D7-D2=1
+			tempD = tempD & 0x03;			//set bits D7-D2=0
 		}
 		else {	//show 6 bit representation of weight/4 on D7-D2
 			est_kg = total_kg;					//initialize estimated weight
 			est_kg = (est_kg >> 2) << 2;		//truncate estimated weight
-			tempD = (PORTD & 0x03) | est_kg;	//show estimated weight/4
+			tempD = (tempD & 0x03) | est_kg;	//show estimated weight/4
 												//on pins D7-D2
 		}
         PORTD = tempD;                  //set PORTD

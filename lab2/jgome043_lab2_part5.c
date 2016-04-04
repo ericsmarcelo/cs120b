@@ -26,8 +26,8 @@ int main(void)
 {
 	DDRD = 0x00; PORTD = 0xFF;	//set PORTD to inputs
 	DDRB = 0xFE; PORTB = 0x00;	//set PORTB to outputs and input
-	
-	unsigned char upper_weight = 0;     //temp var to hold upper 8 bits of 
+
+	unsigned char upper_weight = 0;     //temp var to hold upper 8 bits of
                                         //weight
 	unsigned short full_weight = 0;	    //var to hold store full 9 bit weight
 	const unsigned char max = 70;       //min weight to trigger airbag
@@ -42,21 +42,21 @@ int main(void)
 													//8 bits of weight to
 													//proper places and add
 													//value of PB0
-		
+
 		//large enough passenger detected
 		if (full_weight >= max) {
-			tempB = SetBit(PORTB, 1, 1);	//enable airbag
-			tempB = SetBit(PORTB, 2, 0);	//clear disabled light
+			tempB = SetBit(tempB, 1, 1);	//enable airbag
+			tempB = SetBit(tempB, 2, 0);	//clear disabled light
 		}
 		//passenger too small for airbag
 		else if (full_weight > min && full_weight < max) {
-			tempB = SetBit(PORTB, 1, 0);	//disable airbag
-			tempB = SetBit(PORTB, 2, 1);	//set disabled light
+			tempB = SetBit(tempB, 1, 0);	//disable airbag
+			tempB = SetBit(tempB, 2, 1);	//set disabled light
 		}
 		//no passenger
 		else {
-			tempB = SetBit(PORTB, 1, 0);	//disable airbag
-			tempB = SetBit(PORTB, 2, 0);	//clear disabled light
+			tempB = SetBit(tempB, 1, 0);	//disable airbag
+			tempB = SetBit(tempB, 2, 0);	//clear disabled light
 		}
         PORTB = tempB;                  //set PORTB
 	}
