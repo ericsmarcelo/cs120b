@@ -7,7 +7,6 @@
  *	Partner(s) Name & E-mail: Eric Marcelo - emarc003@ucr.edu
  *	Lab Section: 021
  *	Assignment: Lab #1  Exercise #1 
- *	Exercise Description:
  *
  *
  *	I acknowledge all content contained herein, excluding template or example
@@ -33,7 +32,7 @@ int main(void)
         else {
             tmpB = (tmpB & 0xFE);
         }
-        PORTB = tmpB;
+        PORTB = tmpB;           //set PORTB
     }
     return 0;
 }

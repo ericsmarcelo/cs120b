@@ -7,7 +7,6 @@
  *	Partner(s) Name & E-mail: Eric Marcelo - emarc003@ucr.edu
  *	Lab Section: 021
  *	Assignment: Lab #1  Exercise #4
- *	Exercise Description:
  *
  *
  *	I acknowledge all content contained herein, excluding template or example
@@ -32,6 +31,7 @@ int main(void)
     const unsigned char diff_kg = 80;	//max difference allowed (in kg)
     unsigned short top_kg = 0;		//higher weight
     unsigned short bot_kg = 0;		//lower weight
+    unsigned char tempD = 0;        //temp var for PORTD buffer
 
     while (1)
     {
@@ -41,34 +41,35 @@ int main(void)
 
 		//check if total weight exceeds max (140kg)
 		if (total_kg > max_kg) {
-			PORTD = (PORTD & 0xFE) | 0x01;	//set PD0=1
+			tempD = (PORTD & 0xFE) | 0x01;	//set PD0=1
 		}
 		else {
-			PORTD = PORTD & 0xFE;	//clear PD0
+			tempD = PORTD & 0xFE;	//clear PD0
 		}
 		//check if A and B weight difference exceeds max (80kg)
 		if ((top_kg - bot_kg) > diff_kg) {
-			PORTD = (PORTD & 0xFD) | 0x02;	//set PD1=1
+			tempD = (PORTD & 0xFD) | 0x02;	//set PD1=1
 		}
 		else {
-			PORTD = PORTD & 0xFD;	//clear PD1
+			tempD = PORTD & 0xFD;	//clear PD1
 		}
 		//check if total weight/4 exceeds 6 bit representation
 		//ie 252kg
 		if ((total_kg >> 2) > 63) {
-			PORTD = (PORTD & 0x03) | 0xFC;	//set bits D7-D2=1
+			tempD = (PORTD & 0x03) | 0xFC;	//set bits D7-D2=1
 		}
 		//check if total weight is less than 4kg
 		//(4kg is 6 bit representation minimum)
 		else if (total_kg < 4) {
-			PORTD = (PORTD & 0x03) | 0x03;	//set bits D7-D2=1
+			tempD = (PORTD & 0x03) | 0x03;	//set bits D7-D2=1
 		}
 		else {	//show 6 bit representation of weight/4 on D7-D2
 			est_kg = total_kg;					//initialize estimated weight
 			est_kg = (est_kg >> 2) << 2;		//truncate estimated weight
-			PORTD = (PORTD & 0x03) | est_kg;	//show estimated weight/4
+			tempD = (PORTD & 0x03) | est_kg;	//show estimated weight/4
 												//on pins D7-D2
 		}
+        PORTD = tempD;                  //set PORTD
     }
 	return 0;
 }

@@ -7,7 +7,6 @@
  *	Partner(s) Name & E-mail: Eric Marcelo - emarc003@ucr.edu
  *	Lab Section: 021
  *	Assignment: Lab #1  Exercise #3
- *	Exercise Description:
  *
  *
  *	I acknowledge all content contained herein, excluding template or example
@@ -25,6 +24,7 @@ int main(void)
 	const unsigned char spaces = 4;	//total parking space allocated
 	unsigned char cntavail = 0;	//temp var to hold available spaces
 	unsigned char occupied = 0;	//temp var to store spaces taken
+    unsigned char tempC = 0;    //temp var for PORTC buffer
     while (1)
     {
 		/*
@@ -43,11 +43,12 @@ int main(void)
 
 		//check if lot is full
 		if (cntavail == 0) {
-			PORTC = (PORTC & 0x7F) | 0x80;	//set PC7=1
+			tempC = (PORTC & 0x7F) | 0x80;	//set PC7=1
 		}
 		else if (PINC & 0x80) {
-			PORTC = PORTC & 0x7F;	//clear PC7=1
+			tempC = PORTC & 0x7F;	//clear PC7=1
 		}
+        PORTC = tempC;              //set PORTC
 		PORTC = (PORTC & 0xF0) | cntavail;	//update available space output
                                             //on PORTC
     }

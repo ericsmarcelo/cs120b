@@ -7,7 +7,6 @@
  *	Partner(s) Name & E-mail: Eric Marcelo - emarc003@ucr.edu
  *	Lab Section: 021
  *	Assignment: Lab #1  Exercise #2
- *	Exercise Description:
  *
  *
  *	I acknowledge all content contained herein, excluding template or example
