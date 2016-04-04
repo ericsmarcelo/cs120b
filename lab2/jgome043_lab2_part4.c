@@ -4,7 +4,6 @@
  *	Partner(s) Name & E-mail: Eric Marcelo - emarc003@ucr.edu
  *	Lab Section: 021
  *	Assignment: Lab #1  Exercise #4
- *	Exercise Description:
  *
  *
  *	I acknowledge all content contained herein, excluding template or example
@@ -31,6 +30,7 @@ int main(void)
 	unsigned char val = 0;		//temp var for PORTA values
 	unsigned char upper_a = 0;	//temp var for PA7...PA4
 	unsigned char lower_a = 0;	//temp var for PA3...PA0
+    unsigned char tempC = 0;    //temp var for PORTC buffer
 
 	while(1)
 	{
@@ -39,6 +39,7 @@ int main(void)
 										//shift them to upper bits places
 		upper_a = (val & 0xF0) >> 4;	//store bits PA7...PA4 and shift
 										//shift them to lower bits places
-		PORTC = ((PORTC & 0x00) | lower_a) | upper_a;	//clear and store bits
+		tempC = ((PORTC & 0x00) | lower_a) | upper_a;	//clear and store bits
+        PORTC = tempC;                  //set PORTC
 	}
 }

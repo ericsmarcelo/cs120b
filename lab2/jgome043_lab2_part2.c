@@ -4,7 +4,6 @@
  *	Partner(s) Name & E-mail: Eric Marcelo - emarc003@ucr.edu
  *	Lab Section: 021
  *	Assignment: Lab #2  Exercise #2
- *	Exercise Description:
  *
  *
  *	I acknowledge all content contained herein, excluding template or example
@@ -29,55 +28,56 @@ int main(void)
  	DDRC = 0xFF; PORTC = 0x00;	//set PORTC to outputs
 
  	unsigned char fuel_level = 0;	//var to hold numerical fuel level
+    unsigned char tempC = 0;        //temp var to use as buffer for PORTC
 
  	while(1)
  	{
  		fuel_level = (PINA & 0x0F);	//get current fuel level
 
-		//check if fuel level is near empty
-		if (fuel_level <= 4) {
-			PORTC = SetBit(PORTC, 6, 1);	//illum low fuel lamp
-		}
-		else {
-			PORTC = SetBit(PORTC, 6, 0);	//clear low fuel lamp
-		}
-
-		//check fuel level, illuminate/clear appropriate LED segments
-		if (fuel_level >= 1) {
-			PORTC = SetBit(PORTC, 5, 1);
-		}
-		else {
-			PORTC = SetBit(PORTC, 5, 0);
-		}
-		if (fuel_level >= 3) {
-			PORTC = SetBit(PORTC, 4, 1);
-		}
-		else {
-			PORTC = SetBit(PORTC, 4, 0);
-		}
-		if (fuel_level >= 5) {
-			PORTC = SetBit(PORTC, 3, 1);
-		}
-		else {
-			PORTC = SetBit(PORTC, 3, 0);
-		}
-		if (fuel_level >= 7) {
-			PORTC = SetBit(PORTC, 2, 1);
-		}
-		else {
-			PORTC = SetBit(PORTC, 2, 0);
-		}
-		if (fuel_level >= 10) {
-			PORTC = SetBit(PORTC, 1, 1);
-		}
-		else {
-			PORTC = SetBit(PORTC, 1, 0);
-		}
-		if (fuel_level >= 13) {
-			PORTC = SetBit(PORTC, 0, 1);
-		}
-		else {
-			PORTC = SetBit(PORTC, 0, 0);
-		}
+        //check if fuel level is near empty
+        if (fuel_level <= 4) {      //illum low fuel lamp
+            tempC = SetBit(PORTC, 6, 1); //set temp var
+        }
+        else {	                    //clear low fuel lamp
+            tempC = SetBit(PORTC, 6, 0);    //set temp var
+        }
+        //check fuel level, illuminate/clear appropriate LED segments
+        if (fuel_level >= 1) {
+            tempC = SetBit(PORTC, 5, 1);    //set temp var
+        }
+        else {
+            tempC = SetBit(PORTC, 5, 0);    //set temp var
+        }
+        if (fuel_level >= 3) {
+            tempC = SetBit(PORTC, 4, 1);    //set temp var
+        }
+        else {
+            tempC = SetBit(PORTC, 4, 0);    //set temp var
+        }
+        if (fuel_level >= 5) {
+            tempC = SetBit(PORTC, 3, 1);    //set temp var
+        }
+        else {
+            tempC = SetBit(PORTC, 3, 0);    //set temp var
+        }
+        if (fuel_level >= 7) {
+            tempC = SetBit(PORTC, 2, 1);    //set temp var
+        }
+        else {
+            tempC = SetBit(PORTC, 2, 0);    //set temp var
+        }
+        if (fuel_level >= 10) {
+            tempC = SetBit(PORTC, 1, 1);    //set temp var
+        }
+        else {
+            tempC = SetBit(PORTC, 1, 0);    //set temp var
+        }
+        if (fuel_level >= 13) {
+            tempC = SetBit(PORTC, 0, 1);    //set temp var
+        }
+        else {
+            tempC = SetBit(PORTC, 0, 0);    //set temp var
+        }
+        PORTC = tempC;              //set PORTC
  	}
 }

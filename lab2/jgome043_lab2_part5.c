@@ -4,7 +4,6 @@
  *	Partner(s) Name & E-mail: Eric Marcelo - emarc003@ucr.edu
  *	Lab Section: 021
  *	Assignment: Lab #2  Exercise #5
- *	Exercise Description:
  *
  *
  *	I acknowledge all content contained herein, excluding template or example
@@ -28,10 +27,12 @@ int main(void)
 	DDRD = 0x00; PORTD = 0xFF;	//set PORTD to inputs
 	DDRB = 0xFE; PORTB = 0x00;	//set PORTB to outputs and input
 	
-	unsigned char upper_weight = 0;
-	unsigned short full_weight = 0;	
-	const unsigned char max = 70;
-	const unsigned char min = 5;
+	unsigned char upper_weight = 0;     //temp var to hold upper 8 bits of 
+                                        //weight
+	unsigned short full_weight = 0;	    //var to hold store full 9 bit weight
+	const unsigned char max = 70;       //min weight to trigger airbag
+	const unsigned char min = 5;        //min weight to consider passenger
+    unsigned char tempB = 0;            //temp var for PORTB buffer
 
 	while(1)
 	{
@@ -44,18 +45,19 @@ int main(void)
 		
 		//large enough passenger detected
 		if (full_weight >= max) {
-			PORTB = SetBit(PORTB, 1, 1);	//enable airbag
-			PORTB = SetBit(PORTB, 2, 0);	//clear disabled light
+			tempB = SetBit(PORTB, 1, 1);	//enable airbag
+			tempB = SetBit(PORTB, 2, 0);	//clear disabled light
 		}
 		//passenger too small for airbag
 		else if (full_weight > min && full_weight < max) {
-			PORTB = SetBit(PORTB, 1, 0);	//disable airbag
-			PORTB = SetBit(PORTB, 2, 1);	//set disabled light
+			tempB = SetBit(PORTB, 1, 0);	//disable airbag
+			tempB = SetBit(PORTB, 2, 1);	//set disabled light
 		}
 		//no passenger
 		else {
-			PORTB = SetBit(PORTB, 1, 0);	//disable airbag
-			PORTB = SetBit(PORTB, 2, 0);	//clear disabled light
+			tempB = SetBit(PORTB, 1, 0);	//disable airbag
+			tempB = SetBit(PORTB, 2, 0);	//clear disabled light
 		}
+        PORTB = tempB;                  //set PORTB
 	}
 }

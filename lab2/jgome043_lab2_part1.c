@@ -4,7 +4,6 @@
  *	Partner(s) Name & E-mail: Eric Marcelo - emarc003@ucr.edu
  *	Lab Section: 021
  *	Assignment: Lab #2  Exercise #1 
- *	Exercise Description:
  *	
  *	
  *	I acknowledge all content contained herein, excluding template or example 
@@ -16,25 +15,28 @@
 
 int main(void)
 {
-	DDRA = 0x00; PORTA = 0xFF;
-	DDRB = 0x00; PORTB = 0xFF;
-	DDRC = 0xFF; PORTC = 0x00;
+	DDRA = 0x00; PORTA = 0xFF;  //set PORTA as inputs, set all pins to 1s
+	DDRB = 0x00; PORTB = 0xFF;  //set PORTB as inputs, set all pins to 1s
+	DDRC = 0xFF; PORTC = 0x00;  //set PORTC as outputs, set all pins to 0s
 	
-	unsigned char sum_a = 0;
-	unsigned char sum_b = 0;
+	unsigned char sum_a = 0;    //temp var for sum of PORTA
+	unsigned char sum_b = 0;    //temp var for sum of PORTB
 	
 	while(1)
 	{	
+        //get sum of all bits of PORTA
 		sum_a = (PINA & 0x01) + ((PINA >> 1) & 0x01) +
 		((PINA >> 2) & 0x01) + ((PINA >> 3) & 0x01) +
 		((PINA >> 4) & 0x01) + ((PINA >> 5) & 0x01) +
 		((PINA >> 6) & 0x01) + ((PINA >> 7) & 0x01);
 		
+        //get sum of all bits of PORTB
 		sum_b = (PINB & 0x01) + ((PINB >> 1) & 0x01) +
 		((PINB >> 2) & 0x01) + ((PINB >> 3) & 0x01) +
 		((PINB >> 4) & 0x01) + ((PINB >> 5) & 0x01) +
 		((PINB >> 6) & 0x01) + ((PINB >> 7) & 0x01);
 		
+        //set PORTC to sum of PORTA and PORTB
 		PORTC = sum_a + sum_b;
 	}
 }
