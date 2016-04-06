@@ -12,9 +12,9 @@
 
 
 #include <avr/io.h>
-
-enum States { START, INIT, WAIT1, PRESSED1, WAIT2, PRESSED2 } state;    //initialize state vars
-unsigned char tmpB;                                                     //temp var for PORTB assignment
+//initialize state vars
+enum States { START, INIT, WAIT1, PRESSED1, WAIT2, PRESSED2 } state;
+unsigned char tmpB;                 //temp var for PORTB assignment
 
 void Tick() {
 
@@ -25,13 +25,17 @@ void Tick() {
         case INIT:
             state = WAIT1; break;           //transition to WAIT1 state
         case WAIT1:
-            state = (PINA & 0x01) ? PRESSED1 : state; break;    //transition to PRESSED1 state if PINA0
+            //transition to PRESSED1 state if PINA0
+            state = (PINA & 0x01) ? PRESSED1 : state; break;
         case PRESSED1:
-            state = (!(PINA & 0x01)) ? WAIT2 : state; break;    //transition to WAIT2 state if !PINA0
+            //transition to WAIT2 state if !PINA0
+            state = (!(PINA & 0x01)) ? WAIT2 : state; break;
         case WAIT2:
-            state = (PINA & 0x01) ? PRESSED2 : state; break;    //transition to PRESSED2 state if PINA0
+            //transition to PRESSED2 state if PINA0
+            state = (PINA & 0x01) ? PRESSED2 : state; break;
         case PRESSED2:
-            state = (!(PINA & 0x01)) ? WAIT1 : state; break;    //transition to WAIT1 state if !PINA0
+            //transition to WAIT1 state if !PINA0
+            state = (!(PINA & 0x01)) ? WAIT1 : state; break;
         default:
             state = START;              //assume error, return to START state
             break;

@@ -20,71 +20,71 @@ void Tick() {
     //State Transitions
     switch (state) {
         case START:
-        state = INIT; break;        //transition to INIT state
+            state = INIT; break;        //transition to INIT state
         case INIT:
-        state = DISARM; break;      //transition to DISARM state
+            state = DISARM; break;      //transition to DISARM state
         case DISARM:
-        //A0, A1, A2 not pressed, A7 pressed
-        if (!(PINA & 0x01) && !(PINA & 0x02) && !(PINA & 0x04) && (PINA & 0x80)) {
-            state = ARM;            //transition to ARM state
-        }
-        //A0, A1, A7 not pressed, A2 (#) pressed
-        else if (!(PINA & 0x01) && !(PINA & 0x02) && (PINA & 0x04) && !(PINA & 0x80)) {
-            state = DISARM_OCT;            //transition to DISARM_OCT state
-        }
-        break;
+            //A0, A1, A2 not pressed, A7 pressed
+            if (!(PINA & 0x01) && !(PINA & 0x02) && !(PINA & 0x04) && (PINA & 0x80)) {
+                state = ARM;            //transition to ARM state
+            }
+            //A0, A1, A7 not pressed, A2 (#) pressed
+            else if (!(PINA & 0x01) && !(PINA & 0x02) && (PINA & 0x04) && !(PINA & 0x80)) {
+                state = DISARM_OCT;            //transition to DISARM_OCT state
+            }
+            break;
         case DISARM_OCT:
-        //A0, A2, A7 not pressed, A1 (Y) pressed
-        if (!(PINA & 0x01) && (PINA & 0x02) && !(PINA & 0x04) && !(PINA & 0x80)) {
-            state = ARM;            //transition to ARM state
-        }
-        //A1, A2, A7 not pressed, A0 (X) pressed
-        else if ((PINA & 0x01) && !(PINA & 0x02) && !(PINA & 0x04) && !(PINA & 0x80)) {
-            state = DISARM;            //transition to DISARM state
-        }
-        //A0, A1, A2 not pressed, A7 pressed
-        else if (!(PINA & 0x01) && !(PINA & 0x02) && !(PINA & 0x04) && (PINA & 0x80)) {
-            state = ARM;            //transition to ARM state
-        }
-        break;
+            //A0, A2, A7 not pressed, A1 (Y) pressed
+            if (!(PINA & 0x01) && (PINA & 0x02) && !(PINA & 0x04) && !(PINA & 0x80)) {
+                state = ARM;            //transition to ARM state
+            }
+            //A1, A2, A7 not pressed, A0 (X) pressed
+            else if ((PINA & 0x01) && !(PINA & 0x02) && !(PINA & 0x04) && !(PINA & 0x80)) {
+                state = DISARM;            //transition to DISARM state
+            }
+            //A0, A1, A2 not pressed, A7 pressed
+            else if (!(PINA & 0x01) && !(PINA & 0x02) && !(PINA & 0x04) && (PINA & 0x80)) {
+                state = ARM;            //transition to ARM state
+            }
+            break;
         case ARM:
-        //A0, A1, A7 not pressed, A2 (#) pressed
-        if (!(PINA & 0x01) && !(PINA & 0x02) && (PINA & 0x04) && !(PINA & 0x80)) {
-            state = ARM_OCT;            //transition to ARM_OCT state
-        }
-        break;
+            //A0, A1, A7 not pressed, A2 (#) pressed
+            if (!(PINA & 0x01) && !(PINA & 0x02) && (PINA & 0x04) && !(PINA & 0x80)) {
+                state = ARM_OCT;            //transition to ARM_OCT state
+            }
+            break;
         case ARM_OCT:
-        //A0, A2, A7 not pressed, A1 (Y) pressed
-        if (!(PINA & 0x01) && (PINA & 0x02) && !(PINA & 0x04) && !(PINA & 0x80)) {
-            state = DISARM;            //transition to DISARM state
-        }
-        //A1, A2, A7 not pressed, A0 (X) pressed
-        else if ((PINA & 0x01) && !(PINA & 0x02) && !(PINA & 0x04) && !(PINA & 0x80)) {
-            state = ARM;            //transition to ARM state
-        }
-        //A0, A1, A2 not pressed, A7 pressed
-        else if (!(PINA & 0x01) && !(PINA & 0x02) && !(PINA & 0x04) && (PINA & 0x80)) {
-            state = ARM;            //transition to ARM state
-        }
-        break;
+            //A0, A2, A7 not pressed, A1 (Y) pressed
+            if (!(PINA & 0x01) && (PINA & 0x02) && !(PINA & 0x04) && !(PINA & 0x80)) {
+                state = DISARM;            //transition to DISARM state
+            }
+            //A1, A2, A7 not pressed, A0 (X) pressed
+            else if ((PINA & 0x01) && !(PINA & 0x02) && !(PINA & 0x04) && !(PINA & 0x80)) {
+                state = ARM;            //transition to ARM state
+            }
+            //A0, A1, A2 not pressed, A7 pressed
+            else if (!(PINA & 0x01) && !(PINA & 0x02) && !(PINA & 0x04) && (PINA & 0x80)) {
+                state = ARM;            //transition to ARM state
+            }
+            break;
         default:
-        state = START;              //error likely happened, restart
-        break;
+            state = START;              //error likely happened, restart
+            break;
     }
 
     PORTC = state;                          //store current state to PORTC
     //State Actions
     switch (state) {
         case DISARM:
-        tmpB |= 0x01;                   //set arm bit
-        PORTB = tmpB;                   //set PORTB
-        break;
+            tmpB |= 0x01;                   //set arm bit
+            PORTB = tmpB;                   //set PORTB
+            break;
         case ARM:
-        tmpB &= 0xFE;                   //clear arm bit
-        PORTB = tmpB;                   //set PORTB
-        break;
+            tmpB &= 0xFE;                   //clear arm bit
+            PORTB = tmpB;                   //set PORTB
+            break;
         default:
-        break;
+            break;
     }
 }
 
@@ -100,6 +100,6 @@ int main(void)
 
     while(1)
     {
-        Tick();                             //
+        Tick();
     }
 }
