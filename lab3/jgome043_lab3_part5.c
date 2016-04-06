@@ -13,9 +13,9 @@
 
 #include <avr/io.h>
 
-const unsigned char key1 = 0x01;     //X
-const unsigned char key2 = 0x02;     //Y
-const unsigned char key3 = 0x04;     //#
+const unsigned char KEY1 = 0x01;     //X
+const unsigned char KEY2 = 0x02;     //Y
+const unsigned char KEY3 = 0x04;     //#
 const unsigned char CODE[] = { 0x04, 0x01, 0x02, 0x01 };        //unlock code
 const unsigned char MAX_NUM = 4;                                //max number of keys for code
 
@@ -54,22 +54,22 @@ void get_code() {
     //check for user input required
     else if (keys_entered < MAX_NUM) {
             //X pressed
-            if ((PINA & key1) && !(PINA & key2) && !(PINA & key3)) {
-                user_input[keys_entered] = key1;    //store user input
+            if ((PINA & KEY1) && !(PINA & KEY2) && !(PINA & KEY3)) {
+                user_input[keys_entered] = KEY1;    //store user input
                 keys_entered++;                     //increment keys entered counter
                 prev_state = state;                 //store current arm/disarm state
                 state = KEY_PRS;                    //change state to KEY_PRS (key pressed)
             }
             //Y pressed
-            else if (!(PINA & key1) && (PINA & key2) && !(PINA & key3)) {
-                user_input[keys_entered] = key2;    //store user input
+            else if (!(PINA & KEY1) && (PINA & KEY2) && !(PINA & KEY3)) {
+                user_input[keys_entered] = KEY2;    //store user input
                 keys_entered++;                     //increment keys entered counter
                 prev_state = state;                 //store current arm/disarm state
                 state = KEY_PRS;                    //change state to KEY_PRS (key pressed)
             }
             //# pressed
-            else if (!(PINA & key1) && !(PINA & key2) && (PINA & key3)) {
-                user_input[keys_entered] = key3;    //store user input
+            else if (!(PINA & KEY1) && !(PINA & KEY2) && (PINA & KEY3)) {
+                user_input[keys_entered] = KEY3;    //store user input
                 keys_entered++;                     //increment keys entered counter
                 prev_state = state;                 //store current arm/disarm state
                 state = KEY_PRS;                    //change state to KEY_PRS (key pressed)
