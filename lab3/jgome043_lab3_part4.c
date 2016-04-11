@@ -94,8 +94,8 @@ int main(void)
     DDRB = 0xFF; PORTB = 0x00;	//set PORTB to outputs
     DDRC = 0xFF; PORTC = 0x00;	//set PORTC to outputs
 
-    tmpB = 0;
-    state = START;
+    tmpB = 0;                               //initialize temp var for PORTB
+    state = START;                          //initialize state var
     PORTC = state;                          //store current state to PORTC
 
     while(1)
