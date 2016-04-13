@@ -1,9 +1,9 @@
-/*	jgome043_lab5_part1.c - 4/12/2016 10:10:38 PM
+/*	jgome043_lab5_partA1.c - 4/12/2016 10:10:38 PM
  *	Name & E-mail: Joel Gomez - jgome043@ucr.edu
  *	CS Login: jgome043
  *	Partner(s) Name & E-mail: Eric Marcelo - emarc003@ucr.edu
  *	Lab Section: 021
- *	Assignment: Lab #5  Exercise #1
+ *	Assignment: Lab #5  Exercise #A1
  *
  *
  *	I acknowledge all content contained herein, excluding template or example
