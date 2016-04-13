@@ -13,7 +13,7 @@
 
 
 #include <avr/io.h>
-#include <cs120b/timer.h>
+#include "timer.h"
 
 enum States { START, INIT, PLAY, PAUSE } state;      // state vars
 unsigned char tmpB;                     // temp var for PORTB manip
