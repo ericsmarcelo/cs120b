@@ -1,0 +1,218 @@
+/*	[emarc003]_lab6_part2.c - $4/20/2016$
+ *	Name & E-mail:  - Eric Marcelo, emarc003@ucr.edu
+ *	CS Login: emarc003
+ *	Partner(s) Name & E-mail:  - Joel Gomez, jgome043@ucr.edu
+ *	Lab Section: 021
+ *	Assignment: Lab 6  Exercise 2 (challenge)
+ *	Exercise Description: Extend the previous exercise to allow a user to 
+ *  adjust the sound frequency up or down using buttons connected to PA0 
+ *  (up) and PA1 (down). Using our 1 ms timer abstraction, the fastest
+ *  you'll be able to pulse is 1 ms on and 1 ms off, meaning 500 Hz.
+ *	
+ *	
+ *	I acknowledge all content contained herein, excluding template or example 
+ *	code, is my own original work.
+ */ 
+
+
+#include <avr/io.h>
+#include <avr/interrupt.h>
+//#include "timer.h"
+
+volatile unsigned char TimerFlag = 0;//TimerISR() sets this to 1. C programmer should clear to 0
+//Internal variables for mapping AVR's ISR to our cleaner TimerISR model
+unsigned long _avr_timer_M = 1; //Start count from here, down to 0. Default 1ms
+unsigned long _avr_timer_cntcurr = 0;//Current internal count of 1 ms ticks
+//SM variables
+unsigned char delay = 0;
+enum states{start, wait, on, off} state;
+enum fstates{init, wait0, up, wait1, down, wait2} freq;
+
+int tick_noise(){ // produces a sound
+	static unsigned char i;
+	switch (state)//NOISE STATES
+	{
+		case start:// start
+			state = wait;
+			break;
+		case wait:// wait until button is pressed
+			state = (~PINA & 0x04) ? on : wait;
+			break;
+		case on:// stay on until time delay is satisfied / switch to off / reset
+		    if(i < delay && (~PINA & 0x04)){
+				state = on;
+			}else if(!(i < delay) && (~PINA & 0x04)){
+				i = 0;
+				state = off;
+			}else if(!(~PINA & 0x04)){
+				state = wait;
+			}
+			break;
+		case off:// stay off until time delay is satisfied / switch to on / reset
+		     if(i < delay && (~PINA & 0x04)){
+			     state = off;
+			 }else if(!(i < delay) && (~PINA & 0x04)){
+			     i = 0;
+			     state = on;
+			 }else if(!(~PINA & 0x04)){
+			     state = wait;
+		     }
+			break;
+		default:
+			state = start;
+			break;
+	}//NOISE STATES
+	switch (state)//NOISE ACTIONS
+	{
+		case start:
+			PORTB =  0x00;
+			break;
+		case wait:// initialize states
+		    i = 0;
+			PORTB =  0x00;
+			break;
+		case on: //count delay and stay on
+		    ++i;
+			PORTB =  0x10;
+			break;
+		case off: //count delay and stay off
+		    ++i;
+			PORTB =  0x00;
+			break;
+		default:
+			break;
+	}//NOISE ACTIONS
+}
+
+int tick_freq(){ //changes the frequency with a delay variable
+	
+	switch(freq){//FREQ STATES
+		case init://initial state
+		    freq = wait0;
+		    break;
+		case wait0:// up / down / wait
+		    if((~PINA & 0x01)){
+				freq = up;
+			}else if((~PINA & 0x02)){
+				freq = down;
+			}else
+		    freq =  wait0;
+		    break;
+		case up:// up transition to wait1 for button release
+		    freq = wait1;
+		    break;
+		case wait1:// wait until button release / then reset
+		    freq = (~PINA & 0x01) ? wait1 : wait0;
+		    break;
+		case down:// down transition to wait2 for button release
+		    freq = wait2;
+		    break;
+		case wait2:// wait until button release / then reset
+		    freq = (~PINA & 0x02) ? wait2 : wait0;
+		    break;
+		default://default state
+		    freq = wait0;
+		    break;
+		
+	}//FREQ STATES
+	switch(freq){//FREQ ACTIONS
+		case init://do nothing
+			break;
+		case wait0://do nothing
+			break;
+		case up:// if up decrease delay to higher the frequency
+		   if(delay <= 1){
+			   delay = 1;
+			   }else if(delay > 1){
+			   delay = delay - 1;
+		   }
+			break;
+		case wait1://do nothing
+			break;
+		case down:// if down increase delay to lower the frequency
+			 if(delay < 9){
+				 delay = delay + 1;
+				 }else if (delay >= 9){
+				 delay = 9;
+			 }
+			break;
+		case wait2://do nothing
+			break;
+		default:// default action
+			break;
+		
+	}//FREQ ACTIONS
+
+}
+//////////////////////////////////////////////////////////////
+
+
+
+////////// Timer functions ///////////////
+void TimerOn(){
+	//AVR timer/counter controller register TCCR1
+	TCCR1B = 0x0B;  //bit3 = 0: CTC mode (clear timer on compare)
+	//bit2//bit1//bit0 = 011: pre-scalar / 64
+	//00001011: 0x0B
+	//so, 8 MHz clock or 8000000 / 64 = 125, 000 ticks/s
+	//Thus, TCNT1 register will count at 125,000 ticks/s
+	
+	// AVR output compare register OCR1A.
+	OCR1A = 125;	// Timer interrupt will be generated when TCNT1==OCR1A
+	// We want a 1 ms tick. 0.001 s * 125,000 ticks/s = 125
+	// So when TCNT1 register equals 125,
+	// 1 ms has passed. Thus, we compare to 125.
+	
+	// AVR timer interrupt mask register
+	TIMSK1 = 0x02; // bit1: OCIE1A -- enables compare match interrupt
+	//Initialize avr counter
+	TCNT1=0;
+	
+	_avr_timer_cntcurr = _avr_timer_M;
+	//TimerISR will be called every _avr_timer_cntcurr milliseconds
+	
+	//Enable global interrupts
+	SREG |= 0x80;// 0x80: 10000000
+}
+
+void TimerOff(){
+	TCCR1B = 0x00; //bit3//bit2//bit1//bit0 = 0000: timer off
+}
+
+void TimerISR(){
+	TimerFlag = 1;
+}
+
+//In our approach, theC Programmer does not touch this ISR, but rather TimerISR()
+ISR(TIMER1_COMPA_vect){
+	// CPU automatically calls when TCNT1 == OCR1 (every 1 ms per TimerOn settings)
+	_avr_timer_cntcurr--; // Count down to 0 rather than up to TOP
+	if (_avr_timer_cntcurr == 0){// results in a more efficient compare
+		TimerISR();// Call the ISR that the user uses
+		_avr_timer_cntcurr = _avr_timer_M;
+	}
+}
+
+void TimerSet(unsigned long M){
+	_avr_timer_M = M;
+	_avr_timer_cntcurr = _avr_timer_M;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+int main(void)
+{
+	DDRA = 0x00; PORTA = 0xFF;//set PORTA to input
+	DDRB = 0xFF; PORTB = 0x00;//set PORTB to output and initialize to 0
+	TimerSet(1);//500Hz
+	TimerOn();
+	
+	while(1)
+	{
+		// call frequency first, then call noise
+		tick_freq();
+		tick_noise();
+		while(!TimerFlag){}
+			TimerFlag = 0;
+		
+	}
+}
